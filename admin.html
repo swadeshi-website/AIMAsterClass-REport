@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body { background: #111; color: white; font-family: sans-serif; padding: 20px; }
+        .container { background: #222; border-radius: 15px; padding: 20px; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #333; font-size: 14px; }
+        th { color: #00d4ff; text-transform: uppercase; }
+        .btn-clear { background: #ff4d4d; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div id="adminArea" style="display:none;">
+        <h2>Registered Student Data</h2>
+        <div class="container">
+            <table>
+                <thead>
+                    <tr><th>Name</th><th>Mobile</th><th>Age</th><th>Occupation</th><th>Address</th><th>Date</th></tr>
+                </thead>
+                <tbody id="studentList"></tbody>
+            </table>
+        </div>
+        <button class="btn-clear" onclick="clearData()">Clear All Data</button>
+    </div>
+
+    <script>
+        const pass = prompt("Enter Admin Password:");
+        if (pass === "admin777") { // Password is admin777
+            document.getElementById('adminArea').style.display = 'block';
+            renderData();
+        } else {
+            window.location.href = "index.html";
+        }
+
+        function renderData() {
+            const students = JSON.parse(localStorage.getItem('ai_students')) || [];
+            document.getElementById('studentList').innerHTML = students.map(s => `
+                <tr>
+                    <td>${s.name}</td>
+                    <td>${s.mobile}</td>
+                    <td>${s.age}</td>
+                    <td>${s.occ}</td>
+                    <td>${s.addr}</td>
+                    <td>${s.date}</td>
+                </tr>
+            `).join('');
+        }
+
+        function clearData() {
+            if(confirm("Are you sure you want to delete all registration records?")) {
+                localStorage.removeItem('ai_students');
+                renderData();
+            }
+        }
+    </script>
+</body>
+</html>
